@@ -23,6 +23,9 @@ namespace MyBooksWeb.Controllers
         }
         [HttpPost]
         public IActionResult Create(Category category) {
+            if (category.Name.ToLower() == category.DisplayOrder.ToString()) {
+                ModelState.AddModelError("name", "Name and Display Order can not be the same");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(category);
