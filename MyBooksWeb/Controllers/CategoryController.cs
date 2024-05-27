@@ -22,10 +22,15 @@ namespace MyBooksWeb.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category category) { 
-            _db.Categories.Add(category);
-            _db.SaveChanges();
-            return RedirectToAction("Index", "Category");
+        public IActionResult Create(Category category) {
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Add(category);
+                _db.SaveChanges();
+                return RedirectToAction("Index", "Category");
+            }
+            
+            return View();
         }
     }
 }
