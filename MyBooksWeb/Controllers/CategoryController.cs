@@ -22,8 +22,10 @@ namespace MyBooksWeb.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category category) {
-            if (category.Name.ToLower() == category.DisplayOrder.ToString()) {
+        public IActionResult Create(Category category)
+        {
+            if (category.Name.ToLower() == category.DisplayOrder.ToString())
+            {
                 ModelState.AddModelError("", "Name and Display Order can not be the same");
             }
             if (ModelState.IsValid)
@@ -32,7 +34,7 @@ namespace MyBooksWeb.Controllers
                 _db.SaveChanges();
                 return RedirectToAction("Index", "Category");
             }
-            
+
             return View();
         }
 
@@ -45,7 +47,8 @@ namespace MyBooksWeb.Controllers
 
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
 
-            if (category == null) {
+            if (category == null)
+            {
                 return NotFound();
             }
 
@@ -66,6 +69,43 @@ namespace MyBooksWeb.Controllers
             }
 
             return View();
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Category? category = _db.Categories.FirstOrDefault(c => c.Id == id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Category");
         }
     }
 }
