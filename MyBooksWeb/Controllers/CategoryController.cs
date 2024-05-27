@@ -32,6 +32,7 @@ namespace MyBooksWeb.Controllers
             {
                 _db.Categories.Add(category);
                 _db.SaveChanges();
+                TempData["success"] = "The category was successfully created!";
                 return RedirectToAction("Index", "Category");
             }
 
@@ -65,6 +66,7 @@ namespace MyBooksWeb.Controllers
             {
                 _db.Categories.Update(category);
                 _db.SaveChanges();
+                TempData["success"] = "The category was successfully edited!";
                 return RedirectToAction("Index", "Category");
             }
 
@@ -105,6 +107,7 @@ namespace MyBooksWeb.Controllers
 
             _db.Categories.Remove(category);
             _db.SaveChanges();
+            TempData["success"] = "The category was successfully deleted!";
             return RedirectToAction("Index", "Category");
         }
     }
