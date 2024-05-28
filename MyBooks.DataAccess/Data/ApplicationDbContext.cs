@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
-using MyBooksWeb.Models;
+using MyBooks.Models;
 
-namespace MyBooksWeb.Data
+namespace MyBooks.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyBooksWeb.Data;
-using MyBooksWeb.Models;
+using MyBooks.Models;
+using MyBooks.DataAccess.Data;
 
 namespace MyBooksWeb.Controllers
 {
