@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyBooks.Models;
 using MyBooks.DataAccess.Data;
+using MyBooks.DataAccess.Repository;
+using MyBooks.DataAccess.Repository.IRepository;
 
 namespace MyBooksWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        ICategoryRepository _categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _db = db;
+            _categoryRepository = categoryRepository;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _db.Categories.ToList();
+            List<Category> categories = _categoryRepository.GetAll().ToList();
             return View(categories);
         }
 
@@ -30,8 +32,8 @@ namespace MyBooksWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(category);
-                _db.SaveChanges();
+                _categoryRepository.Add(category);
+                _categoryRepository.Save();
                 TempData["success"] = "The category was successfully created!";
                 return RedirectToAction("Index", "Category");
             }
@@ -46,7 +48,7 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            var category = _categoryRepository.Get(c => c.Id == id);
 
             if (category == null)
             {
@@ -64,8 +66,8 @@ namespace MyBooksWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(category);
-                _db.SaveChanges();
+                _categoryRepository.Update(category);
+                _categoryRepository.Save();
                 TempData["success"] = "The category was successfully edited!";
                 return RedirectToAction("Index", "Category");
             }
@@ -80,7 +82,7 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            var category = _categoryRepository.Get(c => c.Id == id);
 
             if (category == null)
             {
@@ -98,15 +100,15 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            Category? category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            Category? category = _categoryRepository.Get(c => c.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            _db.Categories.Remove(category);
-            _db.SaveChanges();
+            _categoryRepository.Remove(category);
+            _categoryRepository.Save();
             TempData["success"] = "The category was successfully deleted!";
             return RedirectToAction("Index", "Category");
         }
