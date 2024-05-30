@@ -4,8 +4,9 @@ using MyBooks.DataAccess.Data;
 using MyBooks.DataAccess.Repository;
 using MyBooks.DataAccess.Repository.IRepository;
 
-namespace MyBooksWeb.Controllers
+namespace MyBooksWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         IUnitOfWork _unitOfWork;
