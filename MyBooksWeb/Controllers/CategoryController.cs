@@ -8,14 +8,14 @@ namespace MyBooksWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _categoryRepository.GetAll().ToList();
+            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
             return View(categories);
         }
 
@@ -32,8 +32,8 @@ namespace MyBooksWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _categoryRepository.Add(category);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Add(category);
+                _unitOfWork.Save();
                 TempData["success"] = "The category was successfully created!";
                 return RedirectToAction("Index", "Category");
             }
@@ -48,7 +48,7 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            var category = _categoryRepository.Get(c => c.Id == id);
+            var category = _unitOfWork.Category.Get(c => c.Id == id);
 
             if (category == null)
             {
@@ -66,8 +66,8 @@ namespace MyBooksWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                _categoryRepository.Update(category);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Update(category);
+                _unitOfWork.Save();
                 TempData["success"] = "The category was successfully edited!";
                 return RedirectToAction("Index", "Category");
             }
@@ -82,7 +82,7 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            var category = _categoryRepository.Get(c => c.Id == id);
+            var category = _unitOfWork.Category.Get(c => c.Id == id);
 
             if (category == null)
             {
@@ -100,15 +100,15 @@ namespace MyBooksWeb.Controllers
                 return NotFound();
             }
 
-            Category? category = _categoryRepository.Get(c => c.Id == id);
+            Category? category = _unitOfWork.Category.Get(c => c.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            _categoryRepository.Remove(category);
-            _categoryRepository.Save();
+            _unitOfWork.Category.Remove(category);
+            _unitOfWork.Save();
             TempData["success"] = "The category was successfully deleted!";
             return RedirectToAction("Index", "Category");
         }
