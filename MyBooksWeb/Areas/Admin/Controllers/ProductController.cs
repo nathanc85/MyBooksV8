@@ -4,6 +4,7 @@ using MyBooks.DataAccess.Data;
 using MyBooks.DataAccess.Repository;
 using MyBooks.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MyBooks.Models.ViewModels;
 
 namespace MyBooksWeb.Areas.Admin.Controllers
 {
@@ -31,22 +32,40 @@ namespace MyBooksWeb.Areas.Admin.Controllers
                 Value = c.Id.ToString()
             });
 
-            ViewBag.CategoryList = CategoryList;
+            ProductVM productVM = new ProductVM()
+            {
+                Product = new Product(),
+                CategoryList = CategoryList
+            };
 
-            return View();
+            return View(productVM);
         }
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
-            return View();
+            else
+            {
+                // Get the list of categories.
+                IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                });
 
+                productVM = new ProductVM()
+                {
+                    CategoryList = CategoryList
+                };
+
+                return View(productVM);
+            }
         }
 
         public IActionResult Edit(int? id)
