@@ -3,6 +3,7 @@ using MyBooks.Models;
 using MyBooks.DataAccess.Data;
 using MyBooks.DataAccess.Repository;
 using MyBooks.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MyBooksWeb.Areas.Admin.Controllers
 {
@@ -17,11 +18,21 @@ namespace MyBooksWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+
             return View(objProductList);
         }
 
         public IActionResult Create()
         {
+            // Get the list of categories.
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            });
+
+            ViewBag.CategoryList = CategoryList;
+
             return View();
         }
         [HttpPost]
