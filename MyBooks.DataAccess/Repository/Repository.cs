@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyBooks.DataAccess.Data;
 using MyBooks.DataAccess.Repository.IRepository;
+using MyBooks.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace MyBooks.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();
+            //_db.Products.Include(c => c.Category).Include(ci => ci.CategoryId);
         }
         public void Add(T entity)
         {
